@@ -1920,9 +1920,9 @@ Container {
   position: fixed;
   animation: chat-up 1s;
   bottom: 1rem;
-  right: 8rem;
+  right: 6rem;
   height: 20rem;
-  width: 30rem;
+  width: 26rem;
   border-radius: 1rem;
   background-image: url("./images/Screenshot\ from\ 2023-09-27\ 17-57-12.png");
 
@@ -1939,16 +1939,110 @@ Container {
 }
 
 
+.chat-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  position: relative;
+  z-index: 2;
+  background: rgba(0, 0, 0, 0.2);
+  height: 3.5rem;
+}
 
-
-.logo-mini {
-  width: 30px;
-  height: 30px;
-  border-radius: 15px;
+.title-img {
+  border-radius: 1.4rem;
+  width: 2.8rem;
+  height: 2.8rem;
   background-image: url("./images/Level-group.png");
-  background-size: 140%;
+  background-size: 120%;
   background-position: center;
 }
+
+.title-text {
+  font-size: 1.8rem;
+  color: rgb(173, 129, 82);
+  margin-right: 2rem;
+}
+
+.title-but {
+  width: 3rem;
+}
+
+/* Messages */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* Message Box */
+
+.message-box {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+  z-index: 2;
+  background: rgba(0, 0, 0, 0.3);
+  height: 3.5rem;
+}
+
+.message-input {
+  background: none;
+  border: none;
+  outline: none !important;
+  resize: none;
+  /* color: #c6c6c6bf; */
+  color: white;
+  font-weight: 100;
+  font-size: 1.2rem;
+  height: 3rem;
+  margin-left: 1.5rem;
+  width: 16rem;
+  padding-top: 0.6rem;
+}
+
+.message-submit {
+  /* position: absolute;
+  z-index: 1;
+  top: 13px;
+  right: 20px;
+  font-size: 14px;
+  text-transform: uppercase;
+  line-height: 1;
+  padding: 6px 10px;
+  outline: none !important; */
+  /* transition: background 0.2s ease;
+
+  &:hover {
+    background: #0059A2;
+  } */
+  width: 6rem;
+  height: 2rem;
+  padding-top: 0.3rem;
+  background-color: transparent;
+  border-radius: 0;
+  color: rgb(173, 129, 82);
+  font-size: 0.9rem;
+  font-weight: 100;
+  border: 1px solid rgb(173, 129, 82);
+  margin-right: 1.5rem;
+    
+}
+
+
+
+
+
+
 
 
 
@@ -1965,30 +2059,6 @@ Container {
   flex-direction: column;
 }
 
-.chat-title {
-  flex: 0 1 55px;
-  align-items: center;
-  position: relative;
-  z-index: 2;
-  background: rgba(0, 0, 0, 0.2);
-  color: rgb(173, 129, 82);
-  text-align: left;
-  padding: 17px 0px 0px 70px;
-
-  .avatar {
-    position: absolute;
-    z-index: 1;
-    top: 8px;
-    left: 15px;
-    border-radius: 40px;
-    width: 40px;
-    height: 40px;
-    /* border: 0.1px solid rgba(255, 255, 255, 0.24); */
-    background-image: url("./images/Level-group.png");
-    background-size: 120%;
-    background-position: center;
-  }
-}
 
 /*--------------------
 Messages
@@ -2038,19 +2108,7 @@ Messages
       border-right: 7px solid transparent;
     }
 
-    .avatar {
-      position: absolute;
-      z-index: 1;
-      top: 8px;
-      left: 15px;
-      border-radius: 40px;
-      width: 40px;
-      height: 40px;
-      /* border: 0.1px solid rgba(255, 255, 255, 0.24); */
-      background-image: url("./images/Level-group.png");
-      background-size: 120%;
-      background-position: center;
-    }
+
 
     &.message-personal {
       float: right;
@@ -2081,11 +2139,11 @@ Messages
 
     &.loading {
 
-      /* &::before {
+      &::before {
         @include ball;
         border: none;
         animation-delay: .15s;
-      } */
+      }
 
       & span {
         display: block;
@@ -2094,7 +2152,7 @@ Messages
         height: 10px;
         position: relative;
 
-        /* &::before {
+        &::before {
           @include ball;
           margin-left: -7px;
         }
@@ -2103,56 +2161,9 @@ Messages
           @include ball;
           margin-left: 7px;
           animation-delay: .3s;
-        } */
+        }
       }
     }
 
-  }
-}
-
-
-/*--------------------
-Message Box
---------------------*/
-.message-box {
-  flex: 0 1 55px;
-  width: 100%;
-  background: rgba(0, 0, 0, 0.3);
-  padding: 10px;
-  position: relative;
-
-  & .message-input {
-    background: none;
-    border: none;
-    outline: none !important;
-    resize: none;
-    color: rgba(255, 255, 255, .7);
-    font-size: 16px;
-    height: 30px;
-    margin-left: 10px;
-    padding-right: 20px;
-    width: 265px;
-  }
-
-  textarea:focus:-webkit-placeholder {
-    color: transparent;
-  }
-
-  & .message-submit {
-    position: absolute;
-    z-index: 1;
-    top: 13px;
-    right: 20px;
-    font-size: 14px;
-    text-transform: uppercase;
-    line-height: 1;
-    padding: 6px 10px;
-    border-radius: 5px;
-    outline: none !important;
-    /* transition: background 0.2s ease;
-
-    &:hover {
-      background: #0059A2;
-    } */
   }
 }

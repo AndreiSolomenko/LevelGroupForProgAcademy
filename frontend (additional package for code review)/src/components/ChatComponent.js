@@ -1,10 +1,14 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { v4 as uuidv4 } from 'uuid';
+import { useLanguage } from './LanguageProvider';
 
 function ChatComponent() {
+  const { language } = useLanguage();
+
   const [message, setMessage] = useState('');
   const [messages, setMessages] = useState([]);
   const userName = useRef('');
+  const messagesContainerRef = useRef(null);
 
   useEffect(() => {
     userName.current = `user_${uuidv4()}`;
@@ -22,11 +26,11 @@ function ChatComponent() {
     try {
       const queryParams = new URLSearchParams({
         userName: userName.current,
-        messageText: encodeURIComponent(message),
+        messageText: message,
       });
 
-      const url = `https://levelgroup.com.ua/api/send-message?${queryParams.toString()}`;
-      // const url = `http://localhost:8080/api/send-message?${queryParams.toString()}`;
+      // const url = `https://levelgroup.com.ua/api/send-message?${queryParams.toString()}`;
+      const url = `http://localhost:8080/api/send-message?${queryParams.toString()}`;
 
       const response = await fetch(url, {
         method: 'GET',
@@ -38,32 +42,35 @@ function ChatComponent() {
       if (response.ok) {
         console.log('Message sent successfully');
 
-        setMessages([...messages, message]);
-
         setMessage('');
+        fetchMessages();
       } else {
         console.log('Failed to send message');
       }
     } catch (error) {
       console.error('Error sending message:', error);
     }
-
-    fetchMessages();
-
   };
 
   const fetchMessages = async () => {
     try {
-      const response = await fetch('https://levelgroup.com.ua/api/get-messages');
-      // const response = await fetch('http://localhost:8080/api/get-messages');
+      // const response = await fetch('https://levelgroup.com.ua/api/get-messages');
+      const response = await fetch('http://localhost:8080/api/get-messages');
       if (response.ok) {
         const data = await response.json();
         setMessages(data);
+        scrollToBottom();
       } else {
         console.log('Failed to fetch messages');
       }
     } catch (error) {
       console.error('Error fetching messages:', error);
+    }
+  };
+
+  const scrollToBottom = () => {
+    if (messagesContainerRef.current) {
+      messagesContainerRef.current.scrollTop = messagesContainerRef.current.scrollHeight;
     }
   };
 
@@ -73,34 +80,38 @@ function ChatComponent() {
     return () => clearInterval(intervalId);
   }, []);
 
-
-
   return (
     <div className="chat h-100 w-100">
       <div className="chat-title">
-        <h1>LEVEL GROUP</h1>
-        <div className="avatar">
-          <img className='chat-img' alt="" />
-        </div>
+        <div className='title-img'></div>
+        <div className='title-text'>LEVEL GROUP</div>
+        <div className='title-but'></div>
       </div>
-      <div className="messages">
+
+      <div className="messages" ref={messagesContainerRef}>
         <div className="messages-content">
           {messages ? (
-            messages.map((msg, index) => (
-              <div className="message" key={index}>
-                {msg}
-              </div>
-            ))
+            messages.map((msg, index) => {
+              const parsedMessage = JSON.parse(msg);
+              return (
+                parsedMessage.userName === userName.current && (
+                  <div className="message" key={index}>
+                    {parsedMessage.text}
+                  </div>
+                )
+              );
+            })
           ) : (
-            <p>Loading messages...</p>
+            <div className="message">{language === 'en' ? "Need professional help? Talk with a Level Group property expert now!" : "Потрібна професійна допомога? Поговоріть із експертом із нерухомості Level Group зараз!"}</div>
           )}
         </div>
       </div>
+
       <div className="message-box">
         <textarea
           type="text"
           className="message-input"
-          placeholder="Type message..."
+          placeholder={language === 'en' ? "Type message..." : "Введіть повідомлення..."}
           value={message}
           onChange={handleInputChange}
         ></textarea>
@@ -109,7 +120,7 @@ function ChatComponent() {
           className="message-submit"
           onClick={handleSendClick}
         >
-          Send
+          {language === 'en' ? "SEND" : 'НАДІСЛАТИ'}
         </button>
       </div>
     </div>

@@ -34,8 +34,8 @@ function Sell() {
       email: e.target.email.value,
     };
 
-    const apiUrl = 'https://levelgroup.com.ua/api/submit-form';
-    // const apiUrl = 'http://localhost:8080/api/submit-form';
+    // const apiUrl = 'https://levelgroup.com.ua/api/submit-form';
+    const apiUrl = 'http://localhost:8080/api/submit-form';
 
     const headers = {
       'Accept': 'application/json',

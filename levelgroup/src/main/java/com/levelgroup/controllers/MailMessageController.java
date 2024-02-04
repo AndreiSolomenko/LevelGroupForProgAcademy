@@ -20,7 +20,7 @@ public class MailMessageController {
     public ResponseEntity<String> submitForm(@RequestBody FormData formData) {
         try {
             SimpleMailMessage message = new SimpleMailMessage();
-            message.setTo("andrsolo10@ukr.net");
+            message.setTo("andrsolo10@gmail.com");
             message.setSubject("Form Submission");
             message.setText("Name: " + formData.getName() +
                     "\nPhone: " + formData.getPhone() +

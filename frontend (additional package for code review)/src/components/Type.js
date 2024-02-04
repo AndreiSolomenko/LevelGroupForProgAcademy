@@ -24,8 +24,8 @@ function Type() {
   const [imgs, setImgs] = useState([]);
 
   useEffect(() => {
-    fetch(`https://levelgroup.com.ua/api/${type}`).then(response => response.json()).then(data => {
-    // fetch(`http://localhost:8080/api/${type}`).then(response => response.json()).then(data => {
+    // fetch(`https://levelgroup.com.ua/api/${type}`).then(response => response.json()).then(data => {
+    fetch(`http://localhost:8080/api/${type}`).then(response => response.json()).then(data => {
       setImgs(data);
     }).catch(error => {
       console.error('Error:', error);

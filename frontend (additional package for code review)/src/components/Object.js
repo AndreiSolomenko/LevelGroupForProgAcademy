@@ -43,8 +43,8 @@ function Object(props) {
   const categoryEN = chooseCategory(category, categoryTranslationsEN);
 
   useEffect(() => {
-    fetch(`https://levelgroup.com.ua/api/${type}/${category}/${id}`)
-    // fetch(`http://localhost:8080/api/${type}/${category}/${id}`)
+    // fetch(`https://levelgroup.com.ua/api/${type}/${category}/${id}`)
+    fetch(`http://localhost:8080/api/${type}/${category}/${id}`)
       .then(response => response.json())
       .then(data => {
         setLgObject(data)

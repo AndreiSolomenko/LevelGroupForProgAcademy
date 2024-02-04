@@ -36,8 +36,11 @@ function Objects() {
   const [currentPage, setCurrentPage] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
 
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [currentPage]);
+
   const handlePageChange = (newPage) => {
-    window.scroll(0, 0);
     if (newPage !== currentPage) {
       setCurrentPage(newPage);
       handleFetchData();
@@ -256,8 +259,8 @@ function Objects() {
 
   useEffect(() => {
     const { district, rooms, newBuildingName, metro, floor, fromArea, toArea, fromPrice, toPrice, fromKitchenArea, toKitchenArea, offerType, street } = newFilterParams;
-    fetch(`https://levelgroup.com.ua/api/${type}/${category}?district=${district ||
-    // fetch(`http://localhost:8080/api/${type}/${category}?district=${district ||
+    // fetch(`https://levelgroup.com.ua/api/${type}/${category}?district=${district ||
+    fetch(`http://localhost:8080/api/${type}/${category}?district=${district ||
       ''}&rooms=${rooms || ''}&newBuildingName=${newBuildingName || ''}&metro=${metro ||
       ''}&fromArea=${fromArea || ''}&toArea=${toArea || ''}&fromPrice=${fromPrice || ''}&toPrice=${toPrice ||
       ''}&offerType=${offerType || ''}&street=${street.toLowerCase() ||

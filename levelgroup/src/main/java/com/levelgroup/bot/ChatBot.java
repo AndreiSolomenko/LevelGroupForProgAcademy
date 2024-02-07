@@ -1,5 +1,7 @@
 package com.levelgroup.bot;
 
+import com.levelgroup.model.ChatMessage;
+import com.levelgroup.services.ChatMessageService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.event.ContextRefreshedEvent;
@@ -26,15 +28,18 @@ public class ChatBot extends TelegramLongPollingBot {
     @Value("${bot.token}")
     private String botToken;
 
-    private List<String> storedMessages = new ArrayList<>();
+    private final ChatMessageService chatMessageService;
+
+    public ChatBot(ChatMessageService chatMessageService) {
+        this.chatMessageService = chatMessageService;
+    }
 
     @EventListener({ContextRefreshedEvent.class})
     public void init() throws TelegramApiException {
         TelegramBotsApi telegramBotsApi = new TelegramBotsApi(DefaultBotSession.class);
         try {
             telegramBotsApi.registerBot(this);
-        }
-        catch (TelegramApiException e) {
+        } catch (TelegramApiException e) {
             System.out.println("Error occurred: " + e.getMessage());
         }
     }
@@ -54,21 +59,22 @@ public class ChatBot extends TelegramLongPollingBot {
         try {
             if (update.hasMessage() && update.getMessage().hasText()) {
                 long chatId = update.getMessage().getChatId();
-                String receivedMessage = update.getMessage().getText();
 
                 if (update.getMessage().isReply()) {
+                    String receivedMessage = update.getMessage().getText();
+
                     Message repliedMessage = update.getMessage().getReplyToMessage();
                     String repliedText = repliedMessage.getText();
+                    String userName = getUserName(repliedText);
                     long repliedChatId = repliedMessage.getChatId();
 
-                    String userName = getUserName(repliedText);
+                    ChatMessage chatMessage = new ChatMessage();
+                    chatMessage.setMessageText(receivedMessage);
+                    chatMessage.setUserName(userName);
 
-                    String res = "{\"userName\":\"" + userName + "\",\"text\":\"" + receivedMessage + "\"}";
+                    chatMessageService.add(chatMessage);
 
-
-
-                    storedMessages.add(res);
-                    sendMessage(repliedChatId, "Sent: " + res);
+                    sendMessage(repliedChatId, "Message: " + receivedMessage + " sent to: " + userName);
                 } else {
                     sendMessage(chatId, "Reply to an individual user's message!");
                 }
@@ -76,10 +82,6 @@ public class ChatBot extends TelegramLongPollingBot {
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-
-    public List<String> getStoredMessages() {
-        return storedMessages;
     }
 
     public void sendMessage(long chatId, String text) {
